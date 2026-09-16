@@ -32,8 +32,6 @@ export const testEnvironment = {
     process.env.QA_ACCESS_COOKIE_NAMES ?? process.env.QA_COOKIE_NAMES ?? process.env.QA_ACCESS_COOKIE_NAME
   ),
   accessCredential: process.env.QA_COOKIE_VALUE ?? process.env.ACCESS_CODE,
-  signupPath: process.env.SIGNUP_PATH ?? '/signup',
-  signupApiPattern: process.env.SIGNUP_API_PATTERN ?? '**/*signup*',
   allowUnrecognizedStagingHost: process.env.ALLOW_UNRECOGNIZED_STAGING_HOST === 'true'
 };
 

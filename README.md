@@ -1,17 +1,16 @@
-# Impremis QA automation
+# Playwright Test Runner
 
-Reusable Playwright website-testing framework with structured QA reporting, Jam
-failure evidence, a Jam-to-developer webhook receiver, and a repository-scoped
-Codex QA skill.
+Reusable Playwright QA runner with structured reporting, Jam failure evidence,
+a Jam-to-developer webhook receiver, and a repository-scoped Codex QA workflow.
 
-## Repository contents
+This repository intentionally contains only framework and integration code. It
+does not include website-specific tests, selectors, scripts, credentials, or data.
 
-- `Automation/QA Juls/` — tests, fixtures, page objects, reporters, and webhook integration
-- `.agents/skills/jam-qa-triage/` — reusable Jam QA workflow for Codex
-- `.codex/config.toml` — project-level Jam MCP endpoint (contains no credentials)
+## Contents
 
-Local secrets, generated reports, recordings, browser traces, dependencies, and
-unrelated automation projects are intentionally excluded.
+- `Automation/QA Juls/` — reusable runner, fixtures, reporters, and Jam integration
+- `.agents/skills/jam-qa-triage/` — Codex workflow for Jam-driven QA triage
+- `.codex/config.toml` — project-level Jam MCP endpoint without credentials
 
 ## Developer setup
 
@@ -22,15 +21,7 @@ npx playwright install
 cp .env.example .env
 ```
 
-Configure an approved staging target in `.env`:
-
-```dotenv
-TEST_ENV=staging
-BASE_URL=https://approved-staging-host.example
-JAM_FOLDER=gfxf
-```
-
-Then validate the installation:
+Configure an approved local or staging target in `.env`, then validate:
 
 ```bash
 npm run typecheck
@@ -38,5 +29,8 @@ npm run qa:verify:local
 npm run jam:webhook:test
 ```
 
-See `Automation/QA Juls/README.md` for test commands, environment safety rules,
-Jam publishing, reporting, and framework extension guidance.
+See `Automation/QA Juls/README.md` for the runner, Jam publishing, webhook, and
+project-extension workflow.
+
+Local secrets, dependencies, generated reports, browser traces, videos, and
+screenshots are ignored.

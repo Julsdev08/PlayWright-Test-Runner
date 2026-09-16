@@ -20,14 +20,13 @@ test.afterAll(async () => {
 
 for (const pageConfig of pages) {
   for (const viewport of viewports) {
-    test(`${pageConfig.name} QA audit - ${viewport.name}`, async ({ page, browserName }) => {
+    test(`${pageConfig.name} QA audit - ${viewport.name}`, async ({ page, browserName, accessGate }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      await applyAccessCookie(page);
 
       const monitor = attachBrowserMonitors(page);
       const sitePage = new GenericPage(page);
       await sitePage.goto(pageConfig.path);
-      await unlockAccessGate(page);
+      await accessGate.unlockIfPresent();
 
       const context = {
         pageName: pageConfig.name,
@@ -133,39 +132,4 @@ function resolveReference(referencePath: string | undefined, viewportName: strin
   const parsed = path.parse(referencePath);
   const viewportSpecific = path.join(parsed.dir, `${parsed.name.replace(/desktop-1440$/, viewportName)}${parsed.ext}`);
   return viewportSpecific;
-}
-
-async function applyAccessCookie(page: import('@playwright/test').Page): Promise<void> {
-  const accessCode = process.env.ACCESS_CODE ?? process.env.QA_COOKIE_VALUE;
-  if (!accessCode) return;
-
-  const url = new URL(process.env.STAGING_BASE_URL ?? 'https://example.com');
-  const names = (process.env.QA_COOKIE_NAMES ?? 'access_code,access,password,preview,bypass,site_password,rv_access,rentvouchers_access')
-    .split(',')
-    .map((name) => name.trim())
-    .filter(Boolean);
-
-  await page.context().addCookies(
-    names.map((name) => ({
-      name,
-      value: accessCode,
-      domain: url.hostname,
-      path: '/',
-      httpOnly: false,
-      secure: url.protocol === 'https:',
-      sameSite: 'Lax' as const
-    }))
-  );
-}
-
-async function unlockAccessGate(page: import('@playwright/test').Page): Promise<void> {
-  const accessCode = process.env.ACCESS_CODE ?? process.env.QA_COOKIE_VALUE;
-  if (!accessCode) return;
-
-  const passwordInput = page.locator('input[type="password"]').first();
-  if ((await passwordInput.count()) === 0) return;
-
-  await passwordInput.fill(accessCode, { force: true });
-  await passwordInput.press('Enter', { timeout: 3_000 }).catch(() => undefined);
-  await page.waitForLoadState('networkidle', { timeout: 5_000 }).catch(() => undefined);
 }

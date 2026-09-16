@@ -68,13 +68,7 @@ export function createProjectScaffold(options: OnboardingOptions): string {
     requiredTags: ['@smoke', '@regression', '@desktop', '@mobile', '@accessibility'],
     reporting: {
       outputDir: 'artifacts/summaries',
-      formats: ['html', 'json', 'markdown', 'xlsx'],
-      excel: {
-        templatePath: 'templates/reporting/review-log-qa-template.xlsx',
-        outputFile: `${options.projectSlug}-review-log-qa.xlsx`,
-        sheetName: 'Review Log QA',
-        owner: 'QA Automation'
-      }
+      formats: ['html', 'json', 'markdown']
     }
   };
 

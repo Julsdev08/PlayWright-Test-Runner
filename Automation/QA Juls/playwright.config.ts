@@ -13,14 +13,6 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html', { outputFolder: 'reports/playwright', open: 'never' }],
-    ['./framework/reporting/review-log-playwright-reporter.ts', {
-      template: 'templates/reporting/review-log-qa-template.xlsx',
-      output: 'reports/qa/Review Log QA.xlsx',
-      results: 'reports/qa/execution-results.json',
-      sheet: 'Review Log QA',
-      owner: 'QA Automation',
-      baseURL: testEnvironment.baseURL
-    }],
     ['./framework/reporting/jam-failure-reporter.ts', {
       output: 'reports/qa/jam-failures.json',
       baseURL: testEnvironment.baseURL
