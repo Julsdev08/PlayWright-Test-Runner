@@ -1,0 +1,18 @@
+# This repository intentionally publishes only the reusable QA framework.
+/*
+!/.gitignore
+!/README.md
+!/.agents/
+!/.codex/
+!/Automation/
+
+/.agents/*
+!/.agents/skills/
+/.agents/skills/*
+!/.agents/skills/jam-qa-triage/
+
+/.codex/*
+!/.codex/config.toml
+
+/Automation/*
+!/Automation/QA Juls/

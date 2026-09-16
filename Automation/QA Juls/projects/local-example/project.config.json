@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "projectName": "Local Reusable QA Agent Example",
+  "projectSlug": "local-example",
+  "baseURL": "http://127.0.0.1:4173",
+  "testEnvironment": "local",
+  "websiteType": "marketing",
+  "testingScope": [
+    "read-only discovery",
+    "navigation and links",
+    "responsive layout",
+    "accessibility"
+  ],
+  "includedPages": [
+    "/",
+    "/about"
+  ],
+  "excludedPages": [
+    "/admin",
+    "/api"
+  ],
+  "allowedDomains": [
+    "127.0.0.1"
+  ],
+  "browserProjects": [
+    {
+      "name": "desktop-chromium",
+      "device": "desktop",
+      "enabled": true
+    },
+    {
+      "name": "mobile-chromium",
+      "device": "mobile",
+      "enabled": true
+    }
+  ],
+  "authentication": {
+    "required": false,
+    "strategy": "none",
+    "credentialEnvVars": [],
+    "approvedTestAccounts": []
+  },
+  "formsAllowedForSubmission": [],
+  "actions": {
+    "allowed": [
+      "read-only"
+    ],
+    "prohibited": [
+      "data-creating",
+      "notification-triggering",
+      "destructive",
+      "transaction-related",
+      "file-upload"
+    ]
+  },
+  "productionSafety": {
+    "allowReadOnly": true,
+    "allowWriteActions": false,
+    "requireExplicitApprovalForWrites": true
+  },
+  "testData": {
+    "format": "generated",
+    "notes": "No live data is used by the local configuration verification."
+  },
+  "requiredTags": [
+    "@smoke",
+    "@regression",
+    "@desktop",
+    "@mobile",
+    "@accessibility"
+  ],
+  "reporting": {
+    "outputDir": "artifacts/summaries",
+    "formats": [
+      "html",
+      "json",
+      "markdown",
+      "xlsx"
+    ],
+    "excel": {
+      "templatePath": "templates/reporting/review-log-qa-template.xlsx",
+      "outputFile": "local-example-review-log-qa.xlsx",
+      "sheetName": "Review Log QA",
+      "owner": "QA Automation"
+    }
+  }
+}

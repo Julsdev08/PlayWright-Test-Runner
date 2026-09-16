@@ -1,0 +1,53 @@
+{
+  "projectName": "Local Reusable QA Agent Example",
+  "environment": "local",
+  "executionDate": "2026-01-01T00:00:00.000Z",
+  "scopeTested": [
+    "configuration and reporting only"
+  ],
+  "devicesAndBrowsers": [
+    "No browser started"
+  ],
+  "results": [
+    {
+      "testId": "CONF-001",
+      "pageOrFeature": "Project configuration",
+      "status": "Passed",
+      "severity": "High",
+      "priority": "P0",
+      "preconditions": [
+        "The local example configuration exists"
+      ],
+      "reproductionSteps": [
+        "Run npm run qa:validate -- --project local-example"
+      ],
+      "expectedResult": "The configuration is accepted without contacting a website.",
+      "actualResult": "Configuration validation passed.",
+      "device": "configuration-only",
+      "browser": "not started",
+      "evidencePaths": [],
+      "recommendedNextAction": "Continue with localhost-only discovery implementation."
+    },
+    {
+      "testId": "SAFE-001",
+      "pageOrFeature": "Approval gate",
+      "status": "Blocked",
+      "classification": "Blocked by missing requirements",
+      "severity": "Critical",
+      "priority": "P0",
+      "preconditions": [
+        "No write approval manifest exists"
+      ],
+      "reproductionSteps": [
+        "Evaluate a data-creating action without approval"
+      ],
+      "expectedResult": "The action is blocked before execution.",
+      "actualResult": "The action was blocked.",
+      "device": "configuration-only",
+      "browser": "not started",
+      "evidencePaths": [],
+      "recommendedNextAction": "Keep write actions blocked until the exact test is approved."
+    }
+  ]
+}
+
