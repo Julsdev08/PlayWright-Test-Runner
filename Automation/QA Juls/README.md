@@ -50,6 +50,51 @@ npm run test:mobile
 npm run test:accessibility
 ```
 
+## Watch iPhone and Samsung browser tests
+
+The runner includes iPhone 15 (WebKit), Galaxy S24 (Chromium), and the existing
+Pixel 5 (Chromium) as separate Playwright projects. They are included in
+`npm test`; use `npm run test:mobile` to run just the mobile projects. The
+generic QA audit keeps each phone's configured viewport and reports the device
+project name with its actual viewport size.
+
+Install the project dependencies and the two browser engines used by the new
+phone profiles:
+
+```bash
+npm ci
+npx playwright install chromium webkit
+```
+
+Set an approved local or staging target in `.env` as described above, then open
+visible browser windows while the tests run:
+
+```bash
+npm run test:iphone-15:watch
+npm run test:galaxy-s24:watch
+npm run test:devices:watch
+```
+
+These commands use `--headed --workers=1`, so the browser window is visible
+and the two phone projects run one at a time. The window closes after the test.
+To pause and step through a test with Playwright Inspector, use
+`npm run test:iphone-15:debug` or `npm run test:galaxy-s24:debug`.
+Add a test file path after `--`
+to watch only that test, for example:
+
+```bash
+npm run test:iphone-15:watch -- tests/qa-framework.spec.ts
+```
+
+Playwright's device profiles emulate the phone's browser viewport, user agent,
+touch input, and related settings in a **desktop browser window**. They do not
+open an iOS Simulator, Android Emulator, or physical phone. For a native Android
+device or Android Virtual Device, Playwright has a separate experimental Android
+API that requires Android SDK/ADB and Chrome on the device; it is not wired into
+these `playwright test` projects. Native iOS Simulator testing likewise needs a
+separate mobile automation setup. The headed commands above require no mobile
+SDK or simulator installation.
+
 Useful validation commands:
 
 ```bash
@@ -105,6 +150,23 @@ JAM_CLI_PATH=
 The reporter combines retained failure video and trace evidence, limits uploads,
 and stores receipts in `reports/qa/jam-failures.json`. A Jam is evidence for
 triage; it is not automatically proof that the application is defective.
+
+For visible iPhone 15 and Galaxy S24 runs with automatic Jam evidence on a final
+failure, use:
+
+```bash
+npm run jam:doctor
+npm run jam:auth:status
+npm run test:devices:jam:dry-run
+npm run test:devices:jam
+```
+
+The dry run writes the proposed Jam payload without uploading it. To run only
+one phone, use `npm run test:iphone-15:jam` or
+`npm run test:galaxy-s24:jam`. Jam titles and descriptions name the Playwright
+device project. The failure screenshot is used as the Jam poster image; video
+and trace are included when Playwright retains them. No Jam is created while a
+test is still running or after a retry that passes.
 
 ## Jam webhook integration
 

@@ -18,10 +18,20 @@ test.afterAll(async () => {
   console.log(`Excel Report: ${reportPath}`);
 });
 
+const auditViewports = [...viewports, { name: 'device-profile', width: 0, height: 0, category: 'mobile' as const }];
+
 for (const pageConfig of pages) {
-  for (const viewport of viewports) {
-    test(`${pageConfig.name} QA audit - ${viewport.name}`, async ({ page, browserName, accessGate }) => {
-      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+  for (const viewport of auditViewports) {
+    const isDeviceProject = viewport.name === 'device-profile';
+    test(`${pageConfig.name} QA audit - ${viewport.name}`, {
+      tag: isDeviceProject ? '@device-audit' : '@viewport-audit'
+    }, async ({ page, browserName, accessGate }, testInfo) => {
+      if (!isDeviceProject) {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      }
+      const activeViewport = isDeviceProject ? page.viewportSize() : viewport;
+      if (!activeViewport) throw new Error('The browser did not provide a viewport size.');
+      const viewportName = isDeviceProject ? testInfo.project.name : viewport.name;
 
       const monitor = attachBrowserMonitors(page);
       const sitePage = new GenericPage(page);
@@ -31,15 +41,15 @@ for (const pageConfig of pages) {
       const context = {
         pageName: pageConfig.name,
         url: sitePage.currentUrl(),
-        viewport: `${viewport.name} (${viewport.width}x${viewport.height})`,
+        viewport: `${viewportName} (${activeViewport.width}x${activeViewport.height})`,
         browser: browserName
       };
 
       const visualResult = await comparePageToReference(
         page,
-        resolveReference(pageConfig.figmaReference, viewport.name),
+        resolveReference(pageConfig.figmaReference, viewportName),
         pageConfig.name,
-        viewport.name
+        viewportName
       );
 
       if (visualResult.skipped) {

@@ -74,8 +74,9 @@ export default class JamFailureReporter implements Reporter {
     for (const { test, result } of this.finalAttempts.values()) {
       if (result.status !== 'failed' && result.status !== 'timedOut') continue;
 
+      const projectName = test.parent.project()?.name ?? 'unknown-project';
       const title = truncate(
-        annotation(test, 'jam:title') ?? cleanTestTitle(test.title),
+        `[${projectName}] ${annotation(test, 'jam:title') ?? cleanTestTitle(test.title)}`,
         255
       );
       if (attemptedUploads >= maxUploads) {

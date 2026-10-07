@@ -29,13 +29,23 @@ export default defineConfig({
   projects: [
     {
       name: 'desktop-chromium',
-      grepInvert: /@mobile/,
+      grepInvert: /@mobile|@device-audit/,
       use: { ...devices['Desktop Chrome'] }
     },
     {
       name: 'mobile-chromium',
-      grepInvert: /@desktop/,
+      grepInvert: /@desktop|@viewport-audit/,
       use: { ...devices['Pixel 5'] }
+    },
+    {
+      name: 'mobile-iphone-15',
+      grepInvert: /@desktop|@viewport-audit/,
+      use: { ...devices['iPhone 15'] }
+    },
+    {
+      name: 'mobile-galaxy-s24',
+      grepInvert: /@desktop|@viewport-audit/,
+      use: { ...devices['Galaxy S24'] }
     }
   ]
 });
